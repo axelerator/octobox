@@ -17,6 +17,44 @@
   </div>
   <hr>
 
+  <div class="card mb-3">
+    <h5 class="card-header">
+      Saved Searches
+    </h5>
+    <div class="card-body">
+      <p>Pin your favorite searches to the sidebar so you can access them quickly</p>
+
+      <% if current_user.saved_searches.any? %>
+        <table class='table table-responsive-sm border-bottom'>
+          <thead>
+            <th>
+              Name
+            </th>
+            <th colspan="2">
+              Search Query
+            </th>
+          </thead>
+          <% current_user.saved_searches.each do |saved_search| %>
+            <tr>
+              <td>
+                <%= saved_search.name %>
+              </td>
+              <td>
+                <%= saved_search.query %>
+              </td>
+              <td>
+                <%= link_to octicon('pencil'), edit_saved_search_path(saved_search), title: 'Edit', data: {toggle: 'tooltip'}, class: 'mr-2' %>
+                <%= link_to octicon('trashcan'), saved_search_path(saved_search), title: 'Delete', data: {toggle: 'tooltip'}, method: :delete %>
+              </td>
+            </tr>
+          <% end %>
+        </table>
+      <% end %>
+      <p><strong>Save a search:</strong></p>
+      <%= render 'saved_searches/form' %>
+    </div>
+  </div>
+
   <%= form_for current_user do |f| %>
     <% if Octobox.refresh_interval_enabled? || Octobox.personal_access_tokens_enabled? %>
       <% if Octobox.refresh_interval_enabled? %>
